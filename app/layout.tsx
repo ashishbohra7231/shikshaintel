@@ -54,6 +54,11 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
+  verification: {
+    other: {
+      "facebook-domain-verification": "lfavljsgiv8ksveanu8ylzk8fzfmtt",
+    },
+  },
 };
 
 import { ThemeProvider } from "@/context/ThemeContext";
