@@ -1,0 +1,45 @@
+export class AppAssets {
+  static avatar = require("../../public/avatar/1.webp");
+  static logo = require("../../public/common/logo.png");
+  static whiteLogo = require("../../public/logoWhite.png");
+  static arrow = require("../../public/common/arrow.png");
+  static bell = require("../../public/common/button-icon.png");
+  static logo2 = require("../../public/common/avatar image.png");
+  static navStart = require("../../public/navBar/started.png");
+  static home = require("../../public/navBar/home.png");
+  static archive = require("../../public/navBar/archive.png");
+  static invite = require("../../public/navBar/invite.png");
+  static overview = require("../../public/navBar/overview.png");
+  static frameOver = require("../../public/navBar/frameworkOv.png");
+  static docOver = require("../../public/navBar/documentOv.png");
+  static settings = require("../../public/navBar/settings.png");
+  static dots = require("../../public/navBar/vertical.png");
+  static refresh = require("../../public/home/rotate-arrow.png");
+  static alertIcon = require("../../public/home/alert.png");
+  static docIcon = require("../../public/home/docIcon.png");
+  static docArrow = require("../../public/home/docArrow.png");
+  static rectangle = require(`../../public/common/Rectangle.png`);
+  static bluelogo = require("../../public/common/logo.png");
+  static user = require(`../../public/common/User.png`);
+  static lock = require(`../../public/common/lock.png`);
+  static eye = require(`../../public/common/eye.png`);
+  static email = require(`../../public/common/email.png`);
+  static help = require(`../../public/common/help.png`);
+  static left = require(`../../public/common/left.png`);
+  static success = require(`../../public/common/SuccessGIF.gif`);
+  static logoVendor = require(`../../public/common/logoWhite.png`);
+  static banner2 = require(`../../public/showroom/banner2.jpg`);
+  static banner1 = require(`../../public/showroom/banner1.jpg`);
+  static banner3 = require(`../../public/showroom/beyond_crowd.jpg`);
+  static banner4 = require(`../../public/showroom/city_window.jpg`);
+  static banner5 = require(`../../public/showroom/locality_in_rain.jpg`);
+  static banner6 = require(`../../public/showroom/matrix.jpg`);
+  static banner7 = require(`../../public/showroom/my_city.jpg`);
+  static banner8 = require(`../../public/showroom/old_school.jpg`);
+  static banner9 = require(`../../public/showroom/towards_mystic.jpg`);
+  static banner10 = require(`../../public/showroom/old_temple.jpg`);
+  static search = require(`../../public/promotions/search-01.png`);
+  static editBlack = require(`../../public/promotions/editBlack.png`);
+  static boxDimension = require(`../../public/how-to-measure-a-box-LxWxH.jpg`);
+
+}
