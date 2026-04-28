@@ -6,5 +6,3 @@ Allow: /
 
 User-agent: Facebot
 Allow: /
-
-Sitemap: https://www.shikshaintel.in/sitemap.xml
