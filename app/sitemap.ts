@@ -1,11 +1,17 @@
 import { MetadataRoute } from 'next';
+import { blogPosts } from '@/constants/blogData';
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = 'https://www.shikshaintel.in';
-
-  // We use the current date as the lastModified date for dynamic pages
-  // In a real-world scenario with a CMS, you'd fetch the last updated dates from your database
   const currentDate = new Date();
+
+  // Generate sitemap entries for dynamic blog posts
+  const blogUrls = blogPosts.map((post) => ({
+    url: `${baseUrl}/blog/${post.slug}`,
+    lastModified: currentDate, // In a real app, use post.updatedAt or date
+    changeFrequency: 'monthly' as const,
+    priority: 0.7,
+  }));
 
   return [
     {
@@ -50,5 +56,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'yearly',
       priority: 0.5,
     },
+    {
+      url: `${baseUrl}/blog`,
+      lastModified: currentDate,
+      changeFrequency: 'weekly',
+      priority: 0.9,
+    },
+    ...blogUrls,
   ];
 }
