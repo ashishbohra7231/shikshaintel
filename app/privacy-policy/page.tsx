@@ -130,11 +130,18 @@ export default function PrivacyPolicy() {
 
       {/* Footer */}
       <footer className="bg-white border-t border-slate-200 py-12 px-6">
-        <div className="max-w-4xl mx-auto flex flex-col items-center gap-4">
-          <div className="flex flex-wrap justify-center gap-x-8 gap-y-2 text-[12px] font-bold text-slate-400">
+        <div className="max-w-4xl mx-auto flex flex-col items-center gap-4 text-center">
+          <div className="text-[11px] text-slate-500 font-medium">
+            <p className="font-bold text-slate-700 mb-1">Shikshaintel</p>
+            <p>72 GOVIND NAGR NEAR CHITRAKOOT AJMER ROAD JAIPUR</p>
+            <p>Jaipur 302021, Rajasthan</p>
+            <p className="mt-1">+919784725325 | ashishbohra1208@gmail.com</p>
+          </div>
+          <div className="flex flex-wrap justify-center gap-x-8 gap-y-2 text-[12px] font-bold text-slate-400 mt-4">
             <Link href="/about-us" className="hover:text-violet-600 transition-colors">About Us</Link>
             <Link href="/contact-us" className="hover:text-violet-600 transition-colors">Contact Us</Link>
             <Link href="/privacy-policy" className="hover:text-violet-600 transition-colors text-slate-600">Privacy Policy</Link>
+            <Link href="/terms-and-conditions" className="hover:text-violet-600 transition-colors">Terms & Conditions</Link>
           </div>
           <p className="text-sm font-bold text-slate-400">
             © 2025 Shikshaintel. All rights reserved.

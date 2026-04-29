@@ -619,25 +619,34 @@ export default function LandingPage() {
 
       {/* ───────────── FOOTER ───────────── */}
       <footer className="bg-[#0A0A14] border-t border-white/5 py-12 px-6">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
-          <div className="flex items-center gap-2">
-            <div className={`w-7 h-7 bg-gradient-to-br ${isGreenTheme ? 'from-emerald-600 to-teal-600' : 'from-violet-600 to-fuchsia-600'} rounded-lg flex items-center justify-center`}>
-              <span className="text-white font-black text-xs rotate-[-15deg]">SI</span>
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
+          <div className="flex flex-col gap-4">
+            <div className="flex items-center gap-2">
+              <div className={`w-7 h-7 bg-gradient-to-br ${isGreenTheme ? 'from-emerald-600 to-teal-600' : 'from-violet-600 to-fuchsia-600'} rounded-lg flex items-center justify-center`}>
+                <span className="text-white font-black text-xs rotate-[-15deg]">SI</span>
+              </div>
+              <span className="font-black text-white tracking-tight">Shikshaintel</span>
             </div>
-            <span className="font-black text-white tracking-tight">Shikshaintel</span>
+            <div className="text-[11px] text-slate-400 font-medium space-y-1">
+              <p>72 GOVIND NAGR NEAR CHITRAKOOT AJMER ROAD</p>
+              <p>JAIPUR, Jaipur 302021, Rajasthan</p>
+              <p>+919784725325 | ashishbohra1208@gmail.com</p>
+            </div>
           </div>
           
-          <div className="flex flex-wrap justify-center gap-x-8 gap-y-3 text-[12px] font-semibold text-slate-500">
-            <a href="#features" className="hover:text-white transition-colors">Features</a>
-            <a href="#pricing" className="hover:text-white transition-colors">Pricing</a>
-            <Link href="/about-us" className="hover:text-white transition-colors">About Us</Link>
-            <Link href="/contact-us" className="hover:text-white transition-colors">Contact Us</Link>
-            <Link href="/privacy-policy" className="hover:text-white transition-colors">Privacy Policy</Link>
-            <Link href="/auth/register" className="hover:text-white transition-colors">Get Started</Link>
-            <Link href="/auth/login" className="hover:text-white transition-colors">Sign In</Link>
+          <div className="flex flex-col items-center md:items-end gap-4">
+            <div className="flex flex-wrap justify-center md:justify-end gap-x-6 gap-y-2 text-[12px] font-semibold text-slate-500">
+              <a href="#features" className="hover:text-white transition-colors">Features</a>
+              <a href="#pricing" className="hover:text-white transition-colors">Pricing</a>
+              <Link href="/about-us" className="hover:text-white transition-colors">About Us</Link>
+              <Link href="/contact-us" className="hover:text-white transition-colors">Contact Us</Link>
+              <Link href="/privacy-policy" className="hover:text-white transition-colors">Privacy Policy</Link>
+              <Link href="/terms-and-conditions" className="hover:text-white transition-colors">Terms & Conditions</Link>
+              <Link href="/auth/register" className="hover:text-white transition-colors">Get Started</Link>
+              <Link href="/auth/login" className="hover:text-white transition-colors">Sign In</Link>
+            </div>
+            <p className="text-[11px] text-slate-600 font-medium">© 2025 Shikshaintel. Made with ❤️ for library owners.</p>
           </div>
-
-          <p className="text-[11px] text-slate-600 font-medium">© 2025 Shikshaintel. Made with ❤️ for library owners.</p>
         </div>
       </footer>
       <ChatBot isGreenTheme={isGreenTheme} />
