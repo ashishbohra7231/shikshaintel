@@ -59,6 +59,9 @@ export const metadata: Metadata = {
       "facebook-domain-verification": "whix62hy8qgsmqg1cf7xu1f8eyh3ao",
     },
   },
+  other: {
+    "fb:app_id": "1209800404401060",
+  },
 };
 
 import { ThemeProvider } from "@/context/ThemeContext";
