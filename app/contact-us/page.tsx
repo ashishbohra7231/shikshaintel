@@ -64,7 +64,7 @@ export default function ContactUs() {
                   </div>
                   <div>
                     <p className="text-sm font-black text-slate-400 uppercase tracking-widest mb-1">Phone</p>
-                    <p className="text-lg font-black text-slate-900">+91 89470 95378</p>
+                    <p className="text-lg font-black text-slate-900">+919784725325</p>
                     <p className="text-slate-500 text-sm font-medium mt-1">Mon - Sat, 9am - 7pm</p>
                   </div>
                 </div>
@@ -90,8 +90,8 @@ export default function ContactUs() {
                   </div>
                   <div>
                     <p className="text-sm font-black text-slate-400 uppercase tracking-widest mb-1">Location</p>
-                    <p className="text-lg font-black text-slate-900">Jaipur, Rajasthan</p>
-                    <p className="text-slate-500 text-sm font-medium mt-1">Available for on-site setup in select areas</p>
+                    <p className="text-lg font-black text-slate-900">72 GOVIND NAGR NEAR CHITRAKOOT AJMER ROAD JAIPUR</p>
+                    <p className="text-slate-500 text-sm font-medium mt-1">Jaipur 302021, Rajasthan</p>
                   </div>
                 </div>
               </div>
