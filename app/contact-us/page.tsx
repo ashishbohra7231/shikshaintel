@@ -64,7 +64,7 @@ export default function ContactUs() {
                   </div>
                   <div>
                     <p className="text-sm font-black text-slate-400 uppercase tracking-widest mb-1">Phone</p>
-                    <p className="text-lg font-black text-slate-900">+919784725325</p>
+                    <p className="text-lg font-black text-slate-900">+919784725325, +918947095378</p>
                     <p className="text-slate-500 text-sm font-medium mt-1">Mon - Sat, 9am - 7pm</p>
                   </div>
                 </div>
@@ -176,7 +176,7 @@ export default function ContactUs() {
             <p className="font-bold text-slate-700 mb-1">Shikshaintel</p>
             <p>72 GOVIND NAGR NEAR CHITRAKOOT AJMER ROAD JAIPUR</p>
             <p>Jaipur 302021, Rajasthan</p>
-            <p className="mt-1">+919784725325 | ashishbohra1208@gmail.com</p>
+            <p className="mt-1">+919784725325, +918947095378 | ashishbohra1208@gmail.com</p>
           </div>
           <div className="flex flex-wrap justify-center gap-x-8 gap-y-2 text-[12px] font-bold text-slate-400 mt-4 md:mt-0">
             <Link href="/about-us" className="hover:text-violet-600 transition-colors">About Us</Link>

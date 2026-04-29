@@ -630,7 +630,7 @@ export default function LandingPage() {
             <div className="text-[11px] text-slate-400 font-medium space-y-1">
               <p>72 GOVIND NAGR NEAR CHITRAKOOT AJMER ROAD</p>
               <p>JAIPUR, Jaipur 302021, Rajasthan</p>
-              <p>+919784725325 | ashishbohra1208@gmail.com</p>
+              <p>+919784725325, +918947095378 | ashishbohra1208@gmail.com</p>
             </div>
           </div>
           

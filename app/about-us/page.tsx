@@ -123,7 +123,7 @@ export default function AboutUs() {
             <p className="font-bold text-slate-700 mb-1">Shikshaintel</p>
             <p>72 GOVIND NAGR NEAR CHITRAKOOT AJMER ROAD JAIPUR</p>
             <p>Jaipur 302021, Rajasthan</p>
-            <p className="mt-1">+919784725325 | ashishbohra1208@gmail.com</p>
+            <p className="mt-1">+919784725325, +918947095378 | ashishbohra1208@gmail.com</p>
           </div>
           <div className="flex flex-wrap justify-center gap-x-8 gap-y-2 text-[12px] font-bold text-slate-400 mt-4 md:mt-0">
             <Link href="/about-us" className="hover:text-violet-600 transition-colors text-slate-600">About Us</Link>
