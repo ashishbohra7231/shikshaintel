@@ -24,7 +24,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   }
 
   return {
-    title: \`\${post.title} | Shikshaintel Library Business Guide\`,
+    title: `${post.title} | Shikshaintel Library Business Guide`,
     description: post.excerpt,
     keywords: post.keywords,
     openGraph: {
