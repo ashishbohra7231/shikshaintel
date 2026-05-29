@@ -1315,12 +1315,14 @@ export default function LibrarySlugPage() {
                       </td>
                     <td className="px-6 py-4">
                        <div className="flex items-center gap-3">
-                          {/* <div className="w-9 h-9 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 font-bold border border-slate-200">
-                             {student.name.charAt(0)}
-                          </div> */}
                           <div>
                              <p className="font-bold text-slate-900">{student.name}</p>
                              <p className="text-xs text-slate-500">{student.phone}</p>
+                             {student.email && (
+                                <p className="text-[10px] text-slate-400 font-medium truncate max-w-[180px]" title={student.email}>
+                                  {student.email}
+                                </p>
+                             )}
                           </div>
                        </div>
                     </td>
