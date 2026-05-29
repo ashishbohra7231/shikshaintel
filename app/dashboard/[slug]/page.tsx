@@ -318,6 +318,7 @@ export default function LibrarySlugPage() {
   const [expiringToday, setExpiringToday] = useState(0);
   const [filterStatus, setFilterStatus] = useState("all");
   const [sendingReminderId, setSendingReminderId] = useState<string | null>(null);
+  const [sendingEmailReminderId, setSendingEmailReminderId] = useState<string | null>(null);
   const [filterPlan, setFilterPlan] = useState("all");
   const [filterShift, setFilterShift] = useState("all");
   const [filterExpiry, setFilterExpiry] = useState("all");
@@ -574,6 +575,31 @@ export default function LibrarySlugPage() {
       alert(e.response?.data?.message || "Failed to send WhatsApp reminder. Please check your token or student phone number.");
     } finally {
       setSendingReminderId(null);
+    }
+  };
+
+  const handleSendManualEmailReminder = async (student: StudentDetail) => {
+    try {
+      const sid = student._id || (student as any).id;
+      if (!sid) return;
+
+      if (!student.email) {
+        alert("This student does not have an email address configured.");
+        return;
+      }
+
+      setSendingEmailReminderId(sid);
+      const token = localStorage.getItem("token") || localStorage.getItem("app-auth");
+      const apiController = new ApiDataController(token || "");
+      
+      const res = await apiController.PostApiWithToken(`${Constants.send_reminder_url}${sid}/send-email-reminder`, {});
+      alert(res?.message || "Email reminder sent successfully!");
+      
+    } catch (e: any) {
+      console.error(e);
+      alert(e.response?.data?.message || "Failed to send email reminder. Please check your configuration.");
+    } finally {
+      setSendingEmailReminderId(null);
     }
   };
 
@@ -1350,6 +1376,9 @@ export default function LibrarySlugPage() {
                        <div className="flex items-center justify-center gap-2">
                           <button onClick={() => handleSendManualReminder(student)} disabled={sendingReminderId === student._id} className="p-2 bg-emerald-50 text-emerald-600 rounded-lg hover:bg-emerald-100 transition-colors" title="WhatsApp Reminder">
                             {sendingReminderId === student._id ? <FiClock className="animate-spin" /> : <FaWhatsapp size={16} />}
+                          </button>
+                          <button onClick={() => handleSendManualEmailReminder(student)} disabled={sendingEmailReminderId === student._id} className="p-2 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors" title="Email Reminder">
+                            {sendingEmailReminderId === student._id ? <FiClock className="animate-spin" /> : <FiMail size={16} />}
                           </button>
                           <button onClick={() => setStudentToEdit(student)} className="p-2 bg-slate-50 text-slate-600 rounded-lg hover:bg-slate-200 transition-colors" title="Edit">
                             <FiEdit size={16} />
