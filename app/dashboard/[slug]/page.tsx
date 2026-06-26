@@ -563,7 +563,8 @@ export default function LibrarySlugPage() {
       alert("Student does not have a phone number.");
       return;
     }
-    const message = `Hello ${student.name}, this is a reminder from ${library?.name || 'the library'}. Your subscription is expiring/expired on ${new Date(student.expiryDate).toLocaleDateString()}. Please renew to continue using our services.`;
+    const shiftDisplay = student.shift === 'fullDay' ? 'Full Day' : student.shift;
+    const message = `Hello ${student.name}, this is a reminder from ${library?.name || 'the library'}. Your subscription for Seat: ${student.seatNumber} (Shift: ${shiftDisplay}) is expiring/expired on ${new Date(student.expiryDate).toLocaleDateString()}. Please renew to continue using our services.`;
     const encodedMessage = encodeURIComponent(message);
     // Remove any non-numeric characters from the phone number
     let cleanPhone = student.phone.replace(/\D/g, '');
@@ -1278,13 +1279,14 @@ export default function LibrarySlugPage() {
                 <th className="px-6 py-4 text-[12px] font-bold text-slate-500 uppercase tracking-wider cursor-pointer hover:text-indigo-600" onClick={() => toggleSort("expiryDate")}>
                   Expiry Date {sortKey === "expiryDate" && (sortOrder === "asc" ? "↑" : "↓")}
                 </th>
+                <th className="px-6 py-4 text-[12px] font-bold text-slate-500 uppercase tracking-wider text-center">Amount Paid</th>
                 <th className="px-6 py-4 text-[12px] font-bold text-slate-500 uppercase tracking-wider text-center">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100 font-medium text-slate-700">
               {sortedStudents.length === 0 ?
                 <tr>
-                  <td colSpan={7} className="px-6 py-20 text-center text-slate-400">
+                  <td colSpan={8} className="px-6 py-20 text-center text-slate-400">
                     No students found matching your filters.
                   </td>
                 </tr>
@@ -1368,8 +1370,13 @@ export default function LibrarySlugPage() {
                           <p className={`text-sm font-bold ${new Date(student.expiryDate) < new Date() ? 'text-rose-600' : 'text-slate-900'}`}>
                              {new Date(student.expiryDate).toLocaleDateString([], { month: 'short', day: 'numeric', year: 'numeric' })}
                           </p>
-                          <p className="text-[10px] text-slate-500 font-medium">Starts: {new Date(student.startDate).toLocaleDateString([], { month: 'short', day: 'numeric' })} · ₹{student.finalPrice}</p>
+                          <p className="text-[10px] text-slate-500 font-medium">Starts: {new Date(student.startDate).toLocaleDateString([], { month: 'short', day: 'numeric' })}</p>
                        </div>
+                    </td>
+                    <td className="px-6 py-4 text-center">
+                       <span className="text-sm font-bold text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-100 inline-block">
+                         ₹{student.finalPrice || 0}
+                       </span>
                     </td>
                     <td className="px-6 py-4">
                        <div className="flex items-center justify-center gap-2">
