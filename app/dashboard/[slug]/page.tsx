@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState, useCallback } from "react";
 import { 
   FiSave, 
   FiUser, 
@@ -362,6 +362,32 @@ export default function LibrarySlugPage() {
 
       return { seatNumber: seatNo, takenMorning, takenEvening, takenFullDay };
     });
+  }, [library, students]);
+
+  const getSeatStatesExcluding = useCallback((excludeId: string) => {
+    if (!library?.totalSeats) return { seatStates: [], fullAvailable: 0, halfAvailable: 0 };
+    const allStudents = Array.isArray(students) ? students : [];
+
+    const states = Array.from({ length: library.totalSeats }, (_, index) => {
+      const seatNo = index + 1;
+      const seatStudents = allStudents.filter((student) =>
+        student.isActive && Number(student?.seatNumber) === seatNo && (student._id !== excludeId && (student as any).id !== excludeId)
+      );
+      const takenMorning = seatStudents.some((student) => normalizeShift(student?.shift) === "morning");
+      const takenEvening = seatStudents.some((student) => normalizeShift(student?.shift) === "evening");
+      const takenFullDay = seatStudents.some((student) => normalizeShift(student?.shift) === "fullday");
+
+      return { seatNumber: seatNo, takenMorning, takenEvening, takenFullDay };
+    });
+    
+    let full = 0, half = 0;
+    states.forEach((seat) => {
+      if (seat.takenFullDay) return;
+      if (!seat.takenMorning && !seat.takenEvening) full++;
+      else if (seat.takenMorning !== seat.takenEvening) half++;
+    });
+
+    return { seatStates: states, fullAvailable: full, halfAvailable: half };
   }, [library, students]);
 
   const seatUnavailable = (seat: SeatState) => {
@@ -1180,6 +1206,9 @@ export default function LibrarySlugPage() {
       {studentToEdit && (
         <EditStudentModal
           student={studentToEdit}
+          availableShifts={availableShifts}
+          seatStatesData={getSeatStatesExcluding(studentToEdit._id || (studentToEdit as any).id)}
+          totalSeats={library?.totalSeats ?? 0}
           onClose={() => setStudentToEdit(null)}
           onSave={handleEditStudent}
         />
@@ -1484,7 +1513,7 @@ function SeatMapModal({
   if (!show) return null;
 
   return (
-    <div className="fixed inset-0 z-[60] flex items-center justify-center bg-slate-900/40 p-4 sm:p-6 backdrop-blur-sm">
+    <div className="fixed inset-0 z-[110] flex items-center justify-center bg-slate-900/40 p-4 sm:p-6 backdrop-blur-sm">
       <div className="flex w-full max-w-5xl max-h-[90vh] flex-col overflow-hidden rounded-2xl bg-white shadow-xl border border-slate-200">
 
         {/* Modal Header */}
@@ -1567,87 +1596,165 @@ function SeatMapModal({
 }
 
 // Edit Student Modal Component
-function EditStudentModal({ student, onClose, onSave }: {
+function EditStudentModal({ student, availableShifts, seatStatesData, totalSeats, onClose, onSave }: {
   student: StudentDetail;
+  availableShifts: string[];
+  seatStatesData: { seatStates: any[]; fullAvailable: number; halfAvailable: number };
+  totalSeats: number;
   onClose: () => void;
   onSave: (id: string, updates: Partial<StudentDetail>) => Promise<void>;
 }) {
   const [formData, setFormData] = useState({
     name: student.name,
     email: student.email || "",
-    phone: student.phone
+    phone: student.phone,
+    seatNumber: student.seatNumber?.toString() || "",
+    shift: student.shift || "morning"
   });
+
+  const [showSeatPopup, setShowSeatPopup] = useState(false);
+
+  const normalizeShift = (s: string) => s?.toLowerCase() === "fullday" ? "fullday" : s?.toLowerCase();
+
+  const handleShiftChange = (newShift: string) => {
+    const orig = normalizeShift(student.shift);
+    const target = normalizeShift(newShift);
+
+    if (orig === "fullday" && target !== "fullday") {
+      alert("A full day student cannot change to a half day shift.");
+      return;
+    }
+    if (orig !== "fullday" && target === "fullday") {
+      alert("A half day student cannot change to a full day shift.");
+      return;
+    }
+
+    setFormData({ ...formData, shift: newShift });
+  };
+
+  const handleSeatMapSelection = (newData: any) => {
+    const orig = normalizeShift(student.shift);
+    const target = normalizeShift(newData.shift);
+
+    if (orig === "fullday" && target !== "fullday") {
+      alert("A full day student cannot change to a half day shift.");
+      return;
+    }
+    if (orig !== "fullday" && target === "fullday") {
+      alert("A half day student cannot change to a full day shift.");
+      return;
+    }
+
+    setFormData({ ...formData, seatNumber: newData.seatNumber, shift: newData.shift });
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSave(student._id, formData);
+    onSave(student._id, {
+      ...formData,
+      seatNumber: Number(formData.seatNumber)
+    });
   };
 
+  const isFullDayOrig = normalizeShift(student.shift) === "fullday";
+
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/40 backdrop-blur-sm p-4">
-      <div className="w-full max-w-md rounded-2xl bg-white p-8 shadow-xl border border-slate-200">
-        <div className="mb-6 flex items-center justify-between">
-          <div>
-             <h3 className="text-xl font-bold text-slate-900">Edit Profile</h3>
-             <p className="text-xs text-slate-500 mt-1">Update student member details</p>
+    <>
+      <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/40 backdrop-blur-sm p-4">
+        <div className="w-full max-w-md rounded-2xl bg-white p-8 shadow-xl border border-slate-200">
+          <div className="mb-6 flex items-center justify-between">
+            <div>
+               <h3 className="text-xl font-bold text-slate-900">Edit Profile</h3>
+               <p className="text-xs text-slate-500 mt-1">Update student member details</p>
+            </div>
+            <button onClick={onClose} className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-slate-50 transition-colors">
+              <FiX size={18} className="text-slate-400" />
+            </button>
           </div>
-          <button onClick={onClose} className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-slate-50 transition-colors">
-            <FiX size={18} className="text-slate-400" />
-          </button>
+
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="space-y-1.5">
+              <label className="text-xs font-semibold text-slate-700 ml-1">Full Name</label>
+              <input
+                type="text"
+                required
+                value={formData.name}
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                className="w-full px-4 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-sm font-medium text-slate-900 outline-none focus:border-indigo-600 focus:bg-white transition-all"
+              />
+            </div>
+
+            <div className="space-y-1.5">
+              <label className="text-xs font-semibold text-slate-700 ml-1">Phone Number</label>
+              <input
+                type="text"
+                required
+                value={formData.phone}
+                onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                className="w-full px-4 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-sm font-medium text-slate-900 outline-none focus:border-indigo-600 focus:bg-white transition-all"
+              />
+            </div>
+
+            <div className="space-y-1.5">
+              <label className="text-xs font-semibold text-slate-700 ml-1">Email Address</label>
+              <input
+                type="email"
+                value={formData.email}
+                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                className="w-full px-4 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-sm font-medium text-slate-900 outline-none focus:border-indigo-600 focus:bg-white transition-all"
+                placeholder="member@example.com"
+              />
+            </div>
+
+            <div>
+              <label className="text-xs font-semibold text-slate-700 ml-1">Seat & Shift Allocation</label>
+              <div className="flex items-center gap-2 mt-1.5">
+                <input
+                  type="text"
+                  readOnly
+                  value={`Seat ${formData.seatNumber} - ${formData.shift === 'fullDay' ? 'Full Day' : formData.shift}`}
+                  className="w-full px-4 py-2.5 rounded-xl bg-slate-100 border border-slate-200 text-sm font-medium text-slate-600 outline-none cursor-not-allowed capitalize"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowSeatPopup(true)}
+                  className="px-4 py-2.5 bg-indigo-50 text-indigo-600 rounded-xl text-sm font-semibold hover:bg-indigo-100 transition-colors whitespace-nowrap"
+                >
+                  Change
+                </button>
+              </div>
+            </div>
+
+            <div className="pt-4 flex gap-3">
+              <button
+                type="button"
+                onClick={onClose}
+                className="flex-1 py-2.5 rounded-xl border border-slate-200 text-sm font-semibold text-slate-600 hover:bg-slate-50 transition-all"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                className="flex-1 py-2.5 rounded-xl bg-indigo-600 text-sm font-semibold text-white hover:bg-indigo-700 shadow-sm transition-all shadow-indigo-100"
+              >
+                Save Changes
+              </button>
+            </div>
+          </form>
         </div>
-
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="space-y-1.5">
-            <label className="text-xs font-semibold text-slate-700 ml-1">Full Name</label>
-            <input
-              type="text"
-              required
-              value={formData.name}
-              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-              className="w-full px-4 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-sm font-medium text-slate-900 outline-none focus:border-indigo-600 focus:bg-white transition-all"
-            />
-          </div>
-
-          <div className="space-y-1.5">
-            <label className="text-xs font-semibold text-slate-700 ml-1">Phone Number</label>
-            <input
-              type="text"
-              required
-              value={formData.phone}
-              onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-              className="w-full px-4 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-sm font-medium text-slate-900 outline-none focus:border-indigo-600 focus:bg-white transition-all"
-            />
-          </div>
-
-          <div className="space-y-1.5">
-            <label className="text-xs font-semibold text-slate-700 ml-1">Email Address</label>
-            <input
-              type="email"
-              value={formData.email}
-              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-              className="w-full px-4 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-sm font-medium text-slate-900 outline-none focus:border-indigo-600 focus:bg-white transition-all"
-              placeholder="member@example.com"
-            />
-          </div>
-
-          <div className="pt-4 flex gap-3">
-            <button
-              type="button"
-              onClick={onClose}
-              className="flex-1 py-2.5 rounded-xl border border-slate-200 text-sm font-semibold text-slate-600 hover:bg-slate-50 transition-all"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              className="flex-1 py-2.5 rounded-xl bg-indigo-600 text-sm font-semibold text-white hover:bg-indigo-700 shadow-sm transition-all shadow-indigo-100"
-            >
-              Save Changes
-            </button>
-          </div>
-        </form>
       </div>
-    </div>
+
+      <SeatMapModal
+        show={showSeatPopup}
+        onClose={() => setShowSeatPopup(false)}
+        seatStates={seatStatesData.seatStates}
+        newCycleData={{ shift: formData.shift, seatNumber: formData.seatNumber }}
+        setNewCycleData={handleSeatMapSelection}
+        fullAvailableCount={seatStatesData.fullAvailable}
+        halfAvailableCount={seatStatesData.halfAvailable}
+        totalSeats={totalSeats}
+      />
+    </>
   );
 }
 
