@@ -558,24 +558,21 @@ export default function LibrarySlugPage() {
     }
   };
 
-  const handleSendManualReminder = async (student: StudentDetail) => {
-    try {
-      const sid = student._id || (student as any).id;
-      if (!sid) return;
-
-      setSendingReminderId(sid);
-      const token = localStorage.getItem("token") || localStorage.getItem("app-auth");
-      const apiController = new ApiDataController(token || "");
-      
-      const res = await apiController.PostApiWithToken(`${Constants.send_reminder_url}${sid}/send-reminder`, {});
-      alert(res?.message || "Reminder sent successfully!");
-      
-    } catch (e: any) {
-      console.error(e);
-      alert(e.response?.data?.message || "Failed to send WhatsApp reminder. Please check your token or student phone number.");
-    } finally {
-      setSendingReminderId(null);
+  const handleSendManualReminder = (student: StudentDetail) => {
+    if (!student.phone) {
+      alert("Student does not have a phone number.");
+      return;
     }
+    const message = `Hello ${student.name}, this is a reminder from ${library?.name || 'the library'}. Your subscription is expiring/expired on ${new Date(student.expiryDate).toLocaleDateString()}. Please renew to continue using our services.`;
+    const encodedMessage = encodeURIComponent(message);
+    // Remove any non-numeric characters from the phone number
+    let cleanPhone = student.phone.replace(/\D/g, '');
+    // Optionally add country code if it's missing (assuming India +91 if length is 10)
+    if (cleanPhone.length === 10) {
+      cleanPhone = '91' + cleanPhone;
+    }
+    const url = `https://wa.me/${cleanPhone}?text=${encodedMessage}`;
+    window.open(url, "_blank");
   };
 
   const handleSendManualEmailReminder = async (student: StudentDetail) => {
